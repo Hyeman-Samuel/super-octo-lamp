@@ -5,6 +5,7 @@ import {errorMiddleware} from './utility/middleware/error.middleware';
 import "reflect-metadata";
 require('express-async-errors');
 import * as dotenv from "dotenv";
+import cors from "cors";
 import { CategoryController } from './controllers/category.controller';
 import { PackageController } from './controllers/package.controller';
 import { ImageController } from './controllers/image.controller';
@@ -22,7 +23,8 @@ class Server {
     private orderController!:OrderController
     private app: express.Application;
     constructor(){
-        this.app = express(); // init the application
+        this.app = express(); 
+        // init the application
         this.configuration();
         this.routes();
     }
@@ -41,6 +43,9 @@ class Server {
     
         this.app.set('port', process.env.PORT || 3000);
         this.app.use(express.json());
+        this.app.use(cors({
+            origin:"*"
+        }))
         dataSource.initialize().then( (dataSource)=>{
             logInfo(`Connected to database ${dataSource.driver.database}`,{})
         })
