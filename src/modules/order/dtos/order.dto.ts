@@ -21,9 +21,6 @@ export class CreateOrderRequestBody{
     @Expose()
     @IsArray()
     @ArrayMinSize(1)
-    @Validate(IsUUIDArray, {
-        message: "Enter valid uuid value for the platformIds",
-    })
     platformIds!:string[]
 
     @IsDefined()
