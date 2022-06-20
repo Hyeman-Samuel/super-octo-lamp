@@ -42,6 +42,9 @@ class Server {
         })
     
         this.app.set('port', process.env.PORT || 3000);
+        this.app.use(cors({
+            origin:"*"
+        }))
         this.app.use(express.json());
         
         dataSource.initialize().then( (dataSource)=>{
@@ -57,9 +60,6 @@ class Server {
         this.frameController = new FrameController()
         this.platformController = new PlatformController()
         this.orderController = new OrderController()
-        this.app.use(cors({
-            origin:"*"
-        }))
         this.app.use("/v1/category",this.categoryController.router);
         this.app.use("/v1/package",this.packageController.router);
         this.app.use("/v1/image",this.imageController.router);
