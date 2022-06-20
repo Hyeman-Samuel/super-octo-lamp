@@ -84,7 +84,6 @@ export class OrderController {
 
         await this.orderService.saveOrderAndOrderDetails(order,requestBody.platformIds);
         await this.notificationService.sendOrderConfirmation(order);
-        res.set('Access-Control-Allow-Origin', '*');
         respond(res,order);
     }
 
