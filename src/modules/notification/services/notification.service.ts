@@ -14,14 +14,14 @@ export class NotificationService {
     public async sendOrderConfirmation(order:OrderEntity){
         const subject = `New Order`;
             const message =`<p>Hello ${order.firstname} ${order.lastname},</p><p>Thank you for your order. Your order has been received and we will begin processing as soon as payment has been confirmed</p>`;
-            await this.mailService.sendMail(order.email,subject,message)
+            await this.mailService.sendMailWithMailJet(order.email,subject,message)
         
     }
 
     public async sendOrderFullfilledAlert(order:OrderEntity){
         const subject = `Order Confirmation`;
             const message =`paid`;
-            await this.mailService.sendMail(order.email,subject,message)
+            await this.mailService.sendMailWithMailJet(order.email,subject,message)
     }
 
 }

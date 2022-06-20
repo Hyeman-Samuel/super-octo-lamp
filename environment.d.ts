@@ -11,6 +11,8 @@ declare global{
             ADMIN_EMAIL:string
             NO_REPLY_EMAIL:string
             ADMIN_PASSWORD:string
+            MJ_APIKEY_PRIVATE:string
+            MJ_APIKEY_PUBLIC:string
         }
     }
 }
