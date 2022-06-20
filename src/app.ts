@@ -44,8 +44,7 @@ class Server {
         this.app.set('port', process.env.PORT || 3000);
         this.app.use(express.json());
         this.app.use(cors({
-            origin:"*",
-            methods: "GET,PUT,POST,DELETE"
+            origin:"*"
         }))
         dataSource.initialize().then( (dataSource)=>{
             logInfo(`Connected to database ${dataSource.driver.database}`,{})
