@@ -121,7 +121,7 @@ export class OrderController {
         if(!order || order.stage != OrderStage.PENDING_PAYMENT ){
             throw new HttpError("Payment not expected",ResponseCode.CONFLICT)
         }
-        const paymentRequest = await this.flutterwaveService.initiatePayment(order,requestBody.redirectUrl);
+        const paymentRequest = await this.flutterwaveService.initiateInlinePayment(order,requestBody.redirectUrl);
 
         respond(res,paymentRequest)
     }

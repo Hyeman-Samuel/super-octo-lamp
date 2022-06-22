@@ -6,7 +6,7 @@ import { FlutterwaveTransferResponseBody, FlutterwaveVerificationResponseData, F
 
 export class FlutterwaveService {
 
-    public initiatePayment = async (order:OrderEntity,redirectUrl:string):Promise<FlutterwaveTransferResponseBody> => {  
+    public initiateStandardPayment = async (order:OrderEntity,redirectUrl:string):Promise<FlutterwaveTransferResponseBody> => {  
         const config ={
             headers:{
                 Authorization:`Bearer ${process.env.FLUTTERWAVE_SECRET_KEY}`,
@@ -15,26 +15,7 @@ export class FlutterwaveService {
             }
         } as AxiosRequestConfig
 
-        const data ={
-            "tx_ref":order.id,
-            "amount":order.price,
-            "currency":"NGN",
-            "redirect_url":redirectUrl,
-            "payment_options":"card",
-            "meta":{
-                "order_number":order.orderRefrence
-            },
-            "customer":{
-                "email":order.email,
-                "name" :`${order.firstname} ${order.lastname}`
-            }
-            ,
-            "customizations":{
-                "title":"Filtar",
-                "description":"Augumented Reality"
-                ,"logo":"https://res.cloudinary.com/filtarhq/image/upload/v1649246183/brand/favicon_ix1kqf.png"
-            }
-        }
+        const data = this.generateRequestBody(order,redirectUrl)
         try {
             const response =  await axios.post('https://api.flutterwave.com/v3/payments',data,config);
             const responseBody = response.data
@@ -54,6 +35,11 @@ export class FlutterwaveService {
         }
     } 
 
+    public initiateInlinePayment = (order:OrderEntity,redirectUrl:string):object=>{
+        const data = this.generateRequestBody(order,redirectUrl);
+        return data;
+    }
+
     public verifyPayment = async(transactionId:string):Promise<FlutterwaveVerificationResponseData>=>{
 
         const config ={
@@ -68,6 +54,32 @@ export class FlutterwaveService {
 
         return responseBody;
 
+    }
+
+    private generateRequestBody = (order:OrderEntity,redirectUrl:string):object=>{
+        const body  ={
+            "public_key":process.env.FLUTTERWAVE_PUBLIC_KEY,
+            "tx_ref":order.id,
+            "amount":order.price,
+            "currency":"NGN",
+            "redirect_url":redirectUrl,
+            "payment_options":"card",
+            "meta":{
+                "order_number":order.orderRefrence
+            },
+            "customer":{
+                "email":order.email,
+                "phone_number":order.phoneNumber,
+                "name" :`${order.firstname} ${order.lastname}`
+            }
+            ,
+            "customizations":{
+                "title":"Filtar",
+                "description":"Augumented Reality"
+                ,"logo":"https://res.cloudinary.com/filtarhq/image/upload/v1649246183/brand/favicon_ix1kqf.png"
+            }
+        }
+        return body;
     }
 
     
