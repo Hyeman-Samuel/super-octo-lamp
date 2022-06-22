@@ -58,7 +58,7 @@ export class FullfillOrderRequestBody{
     @IsDefined()
     @Expose()
     @IsNotEmpty()
-    @IsUrl()
+    //@IsUrl()
     redirectUrl!: string
 
     @IsDefined()
