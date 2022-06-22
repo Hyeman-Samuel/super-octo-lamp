@@ -73,10 +73,10 @@ export class OrderService {
         })
     }
 
-    public previewOrderDetails=async (packageId:string,platformIds:string[]):Promise<OrderPreview>=>{
+    public previewOrderDetails=async (packageId:string,platformId:string):Promise<OrderPreview>=>{
         const packageToPlatforms =   await platformPackageRepository
         .createQueryBuilder("PackagePlatform")
-        .where("PackagePlatform.packageId = :packageId AND PackagePlatform.platformId IN (:...platformId)", { packageId:packageId,platformId:platformIds})
+        .where("PackagePlatform.packageId = :packageId AND PackagePlatform.platformId IN (:...platformId)", { packageId:packageId,platformId:platformId})
         .innerJoinAndSelect("Platform","platform",`Platform.id = PackagePlatform.platformId`)
         .getMany()
 
@@ -90,7 +90,7 @@ export class OrderService {
         })
 
         const details = new OrderPreview()
-        details.total = await platformPackageRepository.calculatePrice(packageId,platformIds);
+        details.total = await platformPackageRepository.calculatePrice(packageId,platformId);
         details.details =orderDetails;
         return details;
     }
@@ -127,7 +127,8 @@ export class OrderService {
         return result;
     }
 
-    public calculatePrice = async (packageId:string,platformIds:string[]):Promise<number>=>{
-        return await platformPackageRepository.calculatePrice(packageId,platformIds);
+    public calculatePrice = async (packageId:string,platformId:string):Promise<number>=>{
+        const price = await platformPackageRepository.calculatePrice(packageId,platformId);
+        return price;
     }
 }

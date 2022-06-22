@@ -77,7 +77,7 @@ export class OrderController {
             designImages:JSON.parse(JSON.stringify(designs)),
             hashtags:JSON.parse(JSON.stringify(hashtags)),
             orderRefrence:this.orderService.generateOrderRefrence(),
-            price:await this.orderService.calculatePrice(requestBody.packageId,requestBody.platformIds)
+            price:await this.orderService.calculatePrice(requestBody.packageId,requestBody.platformIds[0])
         } as OrderEntity
 
         

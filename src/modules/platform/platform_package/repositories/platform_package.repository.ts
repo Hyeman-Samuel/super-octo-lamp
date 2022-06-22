@@ -30,15 +30,10 @@ export const platformPackageRepository = dataSource.getRepository(PackageToPlatf
             platformsList.setItems(platform)
             return platformsList;
         },
-        async calculatePrice(packageId:string,platformIds:string[]):Promise<number>{
+        async calculatePrice(packageId:string,platformId:string):Promise<number>{
         const data =  await this.createQueryBuilder("PackagePlatform")
-            .select("SUM(PackagePlatform.price)", "price")
-            .where("PackagePlatform.packageId = :packageId AND PackagePlatform.platformId IN (:...platforms)", { packageId:packageId ,platforms:platformIds})
-            .getRawOne()
-            const price = data.price as number
-            if(!price){
-                return 0;
-            }
-            return price
+            .where("PackagePlatform.packageId = :PackageId", { PackageId:packageId}).andWhere("PackagePlatform.platformId = :PlatformId",{PlatformId:platformId}).select("PackagePlatform.price")
+            .getOneOrFail()
+            return data.price
 }
 })
