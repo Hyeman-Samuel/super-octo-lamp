@@ -98,8 +98,8 @@ export class OrderController {
             const order = await this.orderService.getById(webHookData.tx_ref);
             order.stage = OrderStage.PAYMENT_FAILED;
             await this.orderService.update(order);
-            const flwStandardPaymentBody = await this.flutterwaveService.initiateStandardPayment(order,"https://www.filtar.africa")
-            await this.notificationService.sendPaymentRedirectLink(order,flwStandardPaymentBody.checkoutLink);
+            //const flwStandardPaymentBody = await this.flutterwaveService.initiateStandardPayment(order,"https://www.filtar.africa")
+            //await this.notificationService.sendPaymentRedirectLink(order,flwStandardPaymentBody.checkoutLink);
             respond(res,"Order Failed");
         }else{        
 
@@ -107,6 +107,10 @@ export class OrderController {
             if(paymentVerification.status == "successful"){
                 const orderId = webHookData.tx_ref;
                 const order = await this.orderService.getById(orderId);
+                if(order.stage != OrderStage.PENDING_PAYMENT){
+                respond(res,"Payment not needed");
+                return;
+                }
                 order.paymentRefrence = paymentVerification.flw_ref;
                 order.paidOn = paymentVerification.created_at;
 
