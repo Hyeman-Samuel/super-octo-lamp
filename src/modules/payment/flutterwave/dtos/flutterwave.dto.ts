@@ -9,7 +9,19 @@ export class FlutterwaveTransferResponseBody{
 export class FlutterwaveWebhookData{
     status!: string
     tx_ref!:string
-    transaction_id!:string
+    id!:string
+    flw_ref!: string
+    amount!: number
+    currency!: string
+    charged_amount!: number
+    app_fee!: number
+    merchant_fee!: number
+    processor_response!:string
+    auth_model!: string
+    ip!: string
+    narration!: string
+    payment_type!: string
+    created_at!: string
 }
 
 export class FlutterwaveVerificationResponseData{

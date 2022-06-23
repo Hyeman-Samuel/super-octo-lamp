@@ -88,7 +88,7 @@ export class OrderController {
     }
 
     private flutterwaveWebhook = async(req:Request,res:Response)=>{
-        const webHookData =  req.query as unknown as FlutterwaveWebhookData;
+        const webHookData =  req.body as FlutterwaveWebhookData;
         const secretHash = process.env.FLUTTERWAVE_SECRET_HASH;
         const signature = req.headers["verif-hash"];
         if (!signature || (signature !== secretHash)) {
@@ -106,7 +106,7 @@ export class OrderController {
             respond(res,"Order Failed");
         }else{        
 
-            let paymentVerification = await this.flutterwaveService.verifyPayment(webHookData.transaction_id); 
+            let paymentVerification = await this.flutterwaveService.verifyPayment(webHookData.id); 
             if(paymentVerification.status == "successful"){
                 const orderId = webHookData.tx_ref;
                 const order = await this.orderService.getById(orderId);
