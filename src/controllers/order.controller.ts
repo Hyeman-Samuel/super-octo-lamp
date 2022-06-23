@@ -98,6 +98,8 @@ export class OrderController {
             const order = await this.orderService.getById(webHookData.tx_ref);
             order.stage = OrderStage.PAYMENT_FAILED;
             await this.orderService.update(order);
+            const flwStandardPaymentBody = await this.flutterwaveService.initiateStandardPayment(order,"https://www.filtar.africa")
+            await this.notificationService.sendPaymentRedirectLink(order,flwStandardPaymentBody.checkoutLink);
             respond(res,"Order Failed");
         }else{        
 

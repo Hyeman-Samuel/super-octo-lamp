@@ -20,8 +20,14 @@ export class NotificationService {
 
     public async sendOrderFullfilledAlert(order:OrderEntity){
         const subject = `Order Confirmation`;
-            const message =`paid`;
+            const message =`Thank you for buying into the xperience your order will begin processing immediately`;
             await this.mailService.sendMailWithMailJet(order.email,subject,message)
+    }
+
+    public async sendPaymentRedirectLink(order:OrderEntity,paymentLink:string){
+        const subject = `Pending Payment`;
+        const message =`<p>Oops ${order.firstname},</p><p>Looks like you haven't paid for the xperience yet. Your order ${order.orderRefrence} has been received and can only begin processing as soon as payment has been confirmed. The link to fulfill your payment is below </p> <p> <a href="${paymentLink}">Click here to proceed to checkout</a></p>`;
+        await this.mailService.sendMailWithMailJet(order.email,subject,message)
     }
 
 }
