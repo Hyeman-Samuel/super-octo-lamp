@@ -96,6 +96,9 @@ export class OrderController {
         }
         if(webHookData.status != 'successful'){
             const order = await this.orderService.getById(webHookData.tx_ref);
+            if(order.stage == OrderStage.PAYMENT_FAILED){
+                respond(res,"Payment already failed")
+            }
             order.stage = OrderStage.PAYMENT_FAILED;
             await this.orderService.update(order);
             //const flwStandardPaymentBody = await this.flutterwaveService.initiateStandardPayment(order,"https://www.filtar.africa")
