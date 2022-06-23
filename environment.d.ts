@@ -9,6 +9,7 @@ declare global{
             REMOVE_BG_API_KEY:string
             FLUTTERWAVE_SECRET_KEY:string
             FLUTTERWAVE_PUBLIC_KEY:string
+            FLUTTERWAVE_SECRET_HASH:string
             ADMIN_EMAIL:string
             NO_REPLY_EMAIL:string
             ADMIN_PASSWORD:string
