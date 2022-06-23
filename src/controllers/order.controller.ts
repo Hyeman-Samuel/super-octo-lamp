@@ -88,7 +88,7 @@ export class OrderController {
     }
 
     private flutterwaveWebhook = async(req:Request,res:Response)=>{
-        const webHookData =  req.body as FlutterwaveWebhookData;
+        const webHookData =  req.body.data as FlutterwaveWebhookData;
         const secretHash = process.env.FLUTTERWAVE_SECRET_HASH;
         const signature = req.headers["verif-hash"];
         if (!signature || (signature !== secretHash)) {
@@ -97,21 +97,21 @@ export class OrderController {
         if(webHookData.status != 'successful'){
             const order = await this.orderService.getById(webHookData.tx_ref);
             if(order.stage == OrderStage.PAYMENT_FAILED){
-                respond(res,"Payment already failed")
+                respond(res,{},"Payment already failed")
             }
             order.stage = OrderStage.PAYMENT_FAILED;
             await this.orderService.update(order);
             //const flwStandardPaymentBody = await this.flutterwaveService.initiateStandardPayment(order,"https://www.filtar.africa")
             //await this.notificationService.sendPaymentRedirectLink(order,flwStandardPaymentBody.checkoutLink);
-            respond(res,"Order Failed");
+            respond(res,{},"Order Failed");
         }else{        
 
             let paymentVerification = await this.flutterwaveService.verifyPayment(webHookData.id); 
-            if(paymentVerification.status == "successful"){
+            if(paymentVerification.status == "success"){
                 const orderId = webHookData.tx_ref;
                 const order = await this.orderService.getById(orderId);
                 if(order.stage != OrderStage.PENDING_PAYMENT){
-                respond(res,"Payment not needed");
+                respond(res,{},"Payment not needed");
                 return;
                 }
                 order.paymentRefrence = paymentVerification.flw_ref;
@@ -120,7 +120,7 @@ export class OrderController {
                 //startProcessingOrder also updates the order
                 await this.orderService.startProcessingOrder(order);
                 await this.notificationService.sendOrderFullfilledAlert(order);
-                respond(res,"Payment Fulfilled");   
+                respond(res,{},"Payment Fulfilled");   
                 return;
             }             
         }
