@@ -56,6 +56,24 @@ export class FlutterwaveService {
 
     }
 
+    public verifyPaymentByTx_ref = async(tx_ref:string):Promise<FlutterwaveVerificationResponseData>=>{
+
+        const config ={
+            headers:{
+                Authorization:`Bearer ${process.env.FLUTTERWAVE_SECRET_KEY}`,
+                "Content-Type": 'application/json'
+            }
+        } as AxiosRequestConfig
+        const response = await axios.get(`https://api.flutterwave.com/v3/transactions/verify_by_reference?tx_ref=${tx_ref}`,config)
+
+        const responseBody = response.data as FlutterwaveVerificationResponseData
+
+        return responseBody;
+
+    }
+
+
+
     private generateRequestBody = (order:OrderEntity,redirectUrl:string):object=>{
         const body  ={
             "public_key":process.env.FLUTTERWAVE_PUBLIC_KEY,

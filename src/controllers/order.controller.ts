@@ -5,7 +5,7 @@ import { CategoryEntity } from "../modules/category/entities/category.entity";
 import { CategoryService } from "../modules/category/services/category.service";
 import { NotificationService } from "../modules/notification/services/notification.service";
 import { OrderStage } from "../modules/order/constants/order.constant";
-import { CreateOrderRequestBody, FullfillOrderRequestBody } from "../modules/order/dtos/order.dto";
+import { CreateOrderRequestBody, FullfillOrderRequestBody, OrderPaymentVerificationBody } from '../modules/order/dtos/order.dto';
 import { OrderEntity } from "../modules/order/entities/order.entity";
 import { OrderService } from "../modules/order/services/order.service";
 import { PackageEntity } from "../modules/package/entities/package.entity";
@@ -126,6 +126,33 @@ export class OrderController {
         const paymentRequest = await this.flutterwaveService.initiateInlinePayment(order,requestBody.redirectUrl);
 
         respond(res,paymentRequest)
+    }
+
+    private verifyOrderPayment = async(req:Request,res:Response)=>{
+        const requestBody = res.locals.input as OrderPaymentVerificationBody;
+        const order = await this.orderService.getOrder({orderRefrence:requestBody.orderReference})
+
+        if(!order ){
+            throw new HttpError("Order does not exist",ResponseCode.CONFLICT)
+        }
+
+        let paymentVerification = await this.flutterwaveService.verifyPaymentByTx_ref(order.id); 
+        if(paymentVerification.status == "success"){
+            if(order.stage != OrderStage.PAYMENT_FAILED && order.stage != OrderStage.PENDING_PAYMENT ){
+            respond(res,{},"Payment not needed");
+            return;
+            }
+            order.paymentRefrence = paymentVerification.flw_ref;
+            order.paidOn = new Date(paymentVerification.created_at);
+
+            //startProcessingOrder also updates the order
+            await this.orderService.startProcessingOrder(order);
+            await this.notificationService.sendOrderFullfilledAlert(order);
+            respond(res,{},"Payment Fulfilled");   
+        }else{
+            throw new HttpError("Payment not made",ResponseCode.BAD_REQUEST)
+        }
+
     }
 
 

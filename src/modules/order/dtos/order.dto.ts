@@ -71,3 +71,10 @@ export class OrderPreview{
     total!:number
     details!:OrderDetailEntity[]
 }
+
+export class OrderPaymentVerificationBody{
+    @IsDefined()
+    @Expose()
+    @IsNotEmpty()
+    orderReference!:string
+}
