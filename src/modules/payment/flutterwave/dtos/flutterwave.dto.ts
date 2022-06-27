@@ -27,5 +27,5 @@ export class FlutterwaveWebhookData{
 export class FlutterwaveVerificationResponseData{
     flw_ref!:string
     status!:string
-    created_at!: Date
+    created_at!: string
 }

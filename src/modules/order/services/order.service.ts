@@ -43,18 +43,12 @@ export class OrderService {
 
     public saveOrderAndOrderDetails = async (order:OrderEntity,platformIds:string[])=>{        
         await dataSource.transaction(async (transactionalEntityManager) => {
-            await transactionalEntityManager
-                .createQueryBuilder()
-                .insert()
-                .into(OrderEntity)
-                .values(order)
-                .execute();
+        
             const packageToPlatforms =   await transactionalEntityManager
             .createQueryBuilder(PackageToPlatform,"PackagePlatform")
-            .where("PackagePlatform.packageId = :packageId AND PackagePlatform.platformId IN (:...platformId)", { packageId:order.package.id,platformId:platformIds})
+            .where("PackagePlatform.packageId = :packageId AND PackagePlatform.platformId IN (:...platformId)", { packageId:order.packageId,platformId:platformIds})
             .innerJoinAndSelect("PackagePlatform.platform","platform")
             .getMany()
-
             const orderDetails = packageToPlatforms.map<OrderDetailEntity>((value:PackageToPlatform)=>{
                 const orderDetail = {
                     platform:value.platform,
@@ -62,13 +56,57 @@ export class OrderService {
                     price:value.price,
                     order:order
                 } as OrderDetailEntity
+                order.price = (order.price == undefined)?value.price:(order.price+=value.price)
                 return orderDetail;
             })
+
+
+            await transactionalEntityManager
+            .createQueryBuilder()
+            .insert()
+            .into(OrderEntity)
+            .values(order)
+            .execute();
+
             await transactionalEntityManager
                 .createQueryBuilder()
                 .insert()
                 .into(OrderDetailEntity)
                 .values(orderDetails)
+                .execute();
+        })
+    }
+
+
+    public saveOrderAndOneOrderDetail = async (order:OrderEntity,platformId:string)=>{        
+        await dataSource.transaction(async (transactionalEntityManager) => {
+        
+            const packageToPlatform=   await transactionalEntityManager
+            .createQueryBuilder(PackageToPlatform,"PackagePlatform")
+            .where("PackagePlatform.packageId = :packageId AND PackagePlatform.platformId = :platformId", { packageId:order.packageId,platformId:platformId})
+            .innerJoinAndSelect("PackagePlatform.platform","platform")
+            .getOne()
+            order.price = packageToPlatform!.price;
+            const orderDetail = {
+                platform:packageToPlatform?.platform,
+                platformName:packageToPlatform?.platform.name,
+                price:packageToPlatform?.price,
+                order:order
+            } as OrderDetailEntity
+            
+        
+            await transactionalEntityManager
+            .createQueryBuilder()
+            .insert()
+            .into(OrderEntity)
+            .values(order)
+            .execute();
+
+            await transactionalEntityManager
+                .createQueryBuilder()
+                .insert()
+                .into(OrderDetailEntity)
+                .values(orderDetail)
                 .execute();
         })
     }

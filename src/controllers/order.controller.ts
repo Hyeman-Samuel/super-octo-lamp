@@ -57,32 +57,19 @@ export class OrderController {
         }
         const designs:string[] = [requestBody.designImage]
         const hashtags:string[] = [requestBody.hashtag]
-        const [category,_package]= await Promise.all([
-        await this.categoryService.getById(requestBody.categoryId),
-        await this.packageService.getById(requestBody.packageId)
-        ])
-        if(!_package){
-            throw new HttpError("package does not exist",ResponseCode.BAD_REQUEST);
-        }
-        if(!category){
-            throw new HttpError("category does not exist",ResponseCode.BAD_REQUEST);
-        }
         const order = {
             firstname: user ? user.firstname : firstname,
             lastname: user ? user.lastname : lastname,
             phoneNumber: user ? user.phoneNumber : phonenumber,
             email: user ? user.email : email,
-            category: category as CategoryEntity,
-            package: _package as PackageEntity,
+            categoryId:requestBody.categoryId,
+            packageId:requestBody.packageId,
             designImages:JSON.parse(JSON.stringify(designs)),
             hashtags:JSON.parse(JSON.stringify(hashtags)),
             orderRefrence:this.orderService.generateOrderRefrence(),
-            price:await this.orderService.calculatePrice(requestBody.packageId,requestBody.platformIds[0])
         } as OrderEntity
-
         
-
-        await this.orderService.saveOrderAndOrderDetails(order,requestBody.platformIds);
+        await this.orderService.saveOrderAndOneOrderDetail(order,requestBody.platformIds[0]);
         await this.notificationService.sendOrderConfirmation(order);
         respond(res,order);
     }
@@ -115,7 +102,7 @@ export class OrderController {
                 return;
                 }
                 order.paymentRefrence = paymentVerification.flw_ref;
-                order.paidOn = paymentVerification.created_at;
+                order.paidOn = new Date(paymentVerification.created_at);
 
                 //startProcessingOrder also updates the order
                 await this.orderService.startProcessingOrder(order);

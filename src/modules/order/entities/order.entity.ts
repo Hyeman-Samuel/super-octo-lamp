@@ -23,7 +23,7 @@ export class OrderEntity {
     price!:number
 
     @Column({default:Currency.NAIRA})
-    public currency!: Currency
+    currency!: Currency
 
     @Column({default:OrderStage.PENDING_PAYMENT})
     stage!:OrderStage
@@ -55,8 +55,14 @@ export class OrderEntity {
     @ManyToOne(() => CategoryEntity, (category) => category.orders,{eager:true})
     category!: CategoryEntity
 
+    @Column("uuid")
+    categoryId!:string
+
     @ManyToOne(() => PackageEntity, (_package) => _package.orders)
     package!: PackageEntity
+
+    @Column("uuid")
+    packageId!:string
 
     @ManyToOne(() => UserEntity, (user) => user.orders,{nullable:true})
     customer!: UserEntity
