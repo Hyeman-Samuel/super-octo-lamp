@@ -102,7 +102,7 @@ export class OrderController {
                 return;
                 }
                 order.paymentRefrence = paymentVerification.flw_ref;
-                order.paidOn = new Date(paymentVerification.created_at);
+                order.paidOn = new Date();
 
                 //startProcessingOrder also updates the order
                 await this.orderService.startProcessingOrder(order);
