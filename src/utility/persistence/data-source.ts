@@ -13,7 +13,7 @@ dotenv.config();
 
 //const entitiesDir = (process.env.NODE_ENV != "development")?"src/**/*.entity{.js}":"src/**/*.entity{.ts}"
 
-const migrationsDir = (process.env.NODE_ENV != "development")?"src/migrations/**{.js}":"src/migrations/**{.ts}"
+const migrationsDir = (process.env.NODE_ENV != "development")?"src/migrations/**{.ts,.js}":"src/migrations/**{.ts,.js}"
 
     export let dataSource = new DataSource({
             type: "postgres",
@@ -38,7 +38,7 @@ const migrationsDir = (process.env.NODE_ENV != "development")?"src/migrations/**
                 UserEntity
             ],
             migrations:[
-                migrationsDir
+                "src/migrations/**{.ts,.js}"
             ]
 
         })
