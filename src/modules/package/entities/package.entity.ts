@@ -26,6 +26,27 @@ export class PackageEntity {
     @Column({default:true})
     active!:boolean
 
+    @Column({default:1})
+    numberOfDesigns!:number
+
+    @Column({default:1})
+    numberOfHashtags!:number
+
+    @Column({default:0})
+    numberOfSongs!:number
+
+    @Column({default:false})
+    mustReachOut!:Boolean
+
+    @Column({default:true})
+    isActive!:Boolean
+
+    @Column({default:new Date()})
+    releaseDate!:Date
+
+    @Column({default:true})
+    isPresented!:Boolean
+
     @Column({default:Currency.NAIRA})
     currency!: Currency
     

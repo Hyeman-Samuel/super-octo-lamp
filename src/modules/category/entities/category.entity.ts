@@ -23,6 +23,9 @@ export class CategoryEntity {
     @Column()
     thumbnailLink!:string
 
+    @Column({default:false})
+    mustReachOut!:Boolean
+
     @OneToMany(() =>PackageToCategory, packageToCategory => packageToCategory.category)
     packageToCategory!: PackageToCategory[];
 
@@ -32,6 +35,15 @@ export class CategoryEntity {
 
     @OneToMany(() =>FrameEntity, frame => frame.category)
     frames!: FrameEntity[];
+
+    @Column({default:true})
+    isActive!:Boolean
+
+    @Column({default:new Date()})
+    releaseDate!:Date
+
+    @Column({default:true})
+    isPresented!:Boolean
 
     @CreateDateColumn()
     createdDate!: Date;
