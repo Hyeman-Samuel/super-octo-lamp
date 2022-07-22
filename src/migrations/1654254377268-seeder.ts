@@ -39,7 +39,7 @@ export class seeder1654254377268 implements MigrationInterface {
                 id:uuid(),
                 name:"Graduation",
                 alias:"graduation",
-                description:"We cover your weddings and create unforgetable memories for everyone using our filtar.",
+                description:"(4 + x) years ended, certificate in your hands, celebration of your grad. memories of the day captured uniquely with filtars.",
                 thumbnailLink:"https://res.cloudinary.com/filtarhq/image/upload/v1652961894/background/hero-phone_ubvkc7.png",
                 createdDate:new Date()
             },
@@ -47,7 +47,7 @@ export class seeder1654254377268 implements MigrationInterface {
                 id:uuid(),
                 name:"Birthdays",
                 alias:"birthdays",
-                description:"It is all about our star girl, Jola. Let's join her to reminisce on the best songs her existence on earth has composed to us; while celebrating her in grand style.",
+                description:"It is all about our star girl, Jola. Let's join her to reminisce on the best songs her existence on earth have composed to us; while celebrating her birthday in grand style.",
                 thumbnailLink:"https://res.cloudinary.com/filtarhq/image/upload/v1652961941/background/birthday_uow5ad.png",
                 createdDate:new Date()
             },
@@ -55,7 +55,7 @@ export class seeder1654254377268 implements MigrationInterface {
                 id:uuid(),
                 name:"Hangouts",
                 alias:"hangouts",
-                description:"In a gathering of 4 - 6 people, a hangout is established. Hangouts with your family and friends with our filtar.",
+                description:"In a gathering of 4 - 6 people, a hangout is established. Hangout with your family and friends with our filtar.",
                 thumbnailLink:"https://res.cloudinary.com/filtarhq/image/upload/v1652961938/background/hangouts_o570tm.png",
                 createdDate:new Date()
             },
@@ -74,7 +74,7 @@ export class seeder1654254377268 implements MigrationInterface {
             name:"Silver",
             alias:"silver",
             description:"One design frame for your pre wedding photoshoot",
-            basePrice:10000,
+            basePrice:15000.00,
             createdDate:new Date()
         },
         {
@@ -82,7 +82,7 @@ export class seeder1654254377268 implements MigrationInterface {
             name:"Gold",
             alias:"gold",
             description:"Two design frames for your pre wedding photoshoot + two digital confetti",
-            basePrice:20000,
+            basePrice:25000.00,
             createdDate:new Date()
         },
         {
@@ -90,7 +90,7 @@ export class seeder1654254377268 implements MigrationInterface {
             name:"Platinum",
             alias:"platinum-first",
             description:"Three design frames for your pre wedding photoshoot + a digital confetti + a custom song of your choice",
-            basePrice:30000,
+            basePrice:40000.00,
             createdDate:new Date()
         }] as PackageEntity[]
 
@@ -127,7 +127,7 @@ export class seeder1654254377268 implements MigrationInterface {
                     packageId:_package.id,
                     platform:platform,
                     platformId:platform.id,
-                    price:(index+1)*priceDifference ,
+                    price:_package.basePrice,
                     createdDate:new Date()
                 } as PackageToPlatform)
             })
