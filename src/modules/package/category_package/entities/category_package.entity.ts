@@ -13,6 +13,9 @@ export class PackageToCategory {
     @Column()
     public categoryId!: string
 
+    // @Column()
+    // description!:string
+
     @ManyToOne(() => PackageEntity, (_package) => _package.packageToCategory,{eager:true})
     public package!: PackageEntity
 

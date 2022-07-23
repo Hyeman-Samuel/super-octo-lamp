@@ -23,7 +23,7 @@ const migrationsDir = (process.env.NODE_ENV != "development")?"src/migrations/**
             username: process.env.DB_USER || 'root',
             password: process.env.DB_PASSWORD || '',
             database: process.env.DB_NAME || 'localhost',
-            migrationsRun:true,
+            //migrationsRun:true,
             synchronize: false,
             logging: true,
             entities: [
@@ -38,7 +38,7 @@ const migrationsDir = (process.env.NODE_ENV != "development")?"src/migrations/**
                 UserEntity
             ],
             migrations:[
-                "src/migrations/**{.ts,.js}"
+                "build/src/migrations/**{.ts,.js}"
             ]
 
         })
