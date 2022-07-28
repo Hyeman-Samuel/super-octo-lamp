@@ -12,7 +12,7 @@
     "build": "rimraf ./build && tsc",
     "migration:add": "npm run typeorm migration:generate -- -d src/utility/persistence/data-source.ts",
     "migration:create": "npm run typeorm migration:create --",
-    "migration": "npm run typeorm migration:run -- -d src/utility/persistence/data-source.ts",
+    "migration": "npm run build && npm run typeorm migration:run -- -d build/src/utility/persistence/data-source.js",
     "migration:revert": "npm run typeorm migration:revert -- -d src/utility/persistence/data-source.ts"
   },
   "keywords": [],

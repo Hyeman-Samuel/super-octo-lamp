@@ -18,10 +18,10 @@ module.exports = [
     "synchronize": false,
     "logging": true,
     "entities": [
-        "src/**/*.entity{.js,.ts}"
+        "build/src/**/*.entity{.js,.ts}"
     ],
     "migrations": [
-        "src/migration/**/*{.js,.ts}"
+        "build/src/migration/**/*{.js,.ts}"
     ],
     "cli": {
         "migrationsDir": `src/migration`

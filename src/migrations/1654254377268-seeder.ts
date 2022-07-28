@@ -218,22 +218,103 @@ export class seeder1654254377268 implements MigrationInterface {
     
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-            await queryRunner.manager.insert<CategoryEntity>(CategoryEntity,this.categories),
-            await queryRunner.manager.insert<PackageEntity>(PackageEntity,this.packages),
-            await queryRunner.manager.insert<PlatformEntity>(PlatformEntity,this.platforms),
-            await queryRunner.manager.insert<PackageToCategory>(PackageToCategory,this.packageCategoryJoin),
-            await queryRunner.manager.insert<PackageToPlatform>(PackageToPlatform,this.packagePlatfromJoin),
-            await queryRunner.manager.insert<UserEntity>(UserEntity,this.users)
+            this.categories.forEach(async (value)=>{
+                await queryRunner.query(
+                    `INSERT INTO "Category" ("id", "name", "alias", "description", "thumbnailLink", "createdDate")
+                    VALUES ($1, $2, $3, $4, $5, $6)`,
+                    [value.id,value.name,value.alias,value.description,value.thumbnailLink,value.createdDate]
+                )
+            })
+            this.packages.forEach(async (value)=>{
+                await queryRunner.query(
+                    `INSERT INTO "Package" ("id", "name", "alias", "description", "basePrice", "createdDate")
+                    VALUES ($1, $2, $3, $4, $5, $6)`,
+                    [value.id,value.name,value.alias,value.description,value.basePrice,value.createdDate]
+                )
+                await queryRunner.manager.save(value)
+            })
+            this.platforms.forEach(
+                async (value)=>{ 
+                    await queryRunner.query(
+                        `INSERT INTO "Platform" ("id", "name", "createdDate")
+                        VALUES ($1, $2, $3)`,
+                        [value.id,value.name,value.createdDate]
+                    )
+                    await queryRunner.manager.save(value)
+                }
+            )
+            this.packageCategoryJoin.forEach(
+                async (value)=>{ 
+                    await queryRunner.query(
+                        `INSERT INTO "PackageCategory" ("id","packageId", "categoryId", "createdDate")
+                        VALUES ($1, $2, $3, $4)`,
+                        [value.id,value.packageId,value.categoryId,value.createdDate]
+                    )
+                }
+            )
+            this.packagePlatfromJoin.forEach(
+                async (value)=>{ 
+                    await queryRunner.query(
+                        `INSERT INTO "PackagePlatform" ("id", "packageId", "platformId", "createdDate")
+                        VALUES ($1, $2, $3, $4)`,
+                        [value.id,value.packageId,value.platformId,value.createdDate]
+                    )
+                }
+            )
+            this.users.forEach(
+                async (value)=>{ 
+                    await queryRunner.query(
+                        `INSERT INTO "User" ("id","email","hash", "firstname","lastname","phoneNumber",
+                        "salt","role","createdDate")
+                        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+                        [value.id,value.email,value.hash,value.firstname,value.lastname,value.phoneNumber,value.salt,value.role,value.createdDate]
+                    )
+                }
+            )
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-    
-        await queryRunner.manager.delete<PackageToCategory>(PackageToCategory,this.packageCategoryJoin.map((value)=>{return value.id})),
-        await queryRunner.manager.delete<PackageToPlatform>(PackageToPlatform,this.packagePlatfromJoin.map((value)=>{return value.id})),
-        await queryRunner.manager.delete<CategoryEntity>(CategoryEntity,this.categories.map((value)=>{return value.id})),
-        await queryRunner.manager.delete<PackageEntity>(PackageEntity,this.packages.map((value)=>{return value.id})),
-        await queryRunner.manager.delete<PlatformEntity>(PlatformEntity,this.platforms.map((value)=>{return value.id}))
-        await queryRunner.manager.delete<UserEntity>(UserEntity,this.users.map((value)=>{return value.id}))
+        this.categories.forEach(async (value)=>{
+            await queryRunner.query(
+                `DELETE FROM "Category" WHERE "id"=$1`,
+                [value.id]
+            )
+        })
+
+        this.packages.forEach(async (value)=>{
+            await queryRunner.query(
+                `DELETE FROM "Package" WHERE "id"=$1`,
+                [value.id]
+            )
+        })
+
+        this.platforms.forEach(async (value)=>{
+            await queryRunner.query(
+                `DELETE FROM "Platform" WHERE "id"=$1`,
+                [value.id]
+            )
+        })
+
+        this.packageCategoryJoin.forEach(async (value)=>{
+            await queryRunner.query(
+                `DELETE FROM "PackageCategory" WHERE "id"=$1`,
+                [value.id]
+            )
+        })
+
+        this.packagePlatfromJoin.forEach(async (value)=>{
+            await queryRunner.query(
+                `DELETE FROM "PackagePlatform" WHERE "id"=$1`,
+                [value.id]
+            )
+        })
+
+        this.users.forEach(async (value)=>{
+            await queryRunner.query(
+                `DELETE FROM "User" WHERE "id"=$1`,
+                [value.id]
+            )
+        })
 
     }
 
