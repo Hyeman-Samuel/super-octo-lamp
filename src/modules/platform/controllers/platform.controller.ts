@@ -1,10 +1,10 @@
 import { Request, Router,Response } from "express";
-import { Platform } from "../modules/platform/constants/platform.constant";
-import { PlatformRequestBody } from "../modules/platform/dtos/platform.dto";
-import { PlatformEntity } from "../modules/platform/entities/platform.entity";
-import { PlatformService } from "../modules/platform/services/platform.service";
-import { validationMiddleware } from "../utility/middleware/validation.middleware";
-import { respond} from "../utility/response/response";
+import { Platform } from "../constants/platform.constant";
+import { PlatformRequestBody } from "../dtos/platform.dto";
+import { PlatformEntity } from "../entities/platform.entity";
+import { PlatformService } from "../services/platform.service";
+import { validationMiddleware } from "../../../utility/middleware/validation.middleware";
+import { respond} from "../../../utility/response/response";
 
 export class PlatformController {
     public router: Router;

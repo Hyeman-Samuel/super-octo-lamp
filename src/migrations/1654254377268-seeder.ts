@@ -255,9 +255,9 @@ export class seeder1654254377268 implements MigrationInterface {
             this.packagePlatfromJoin.forEach(
                 async (value)=>{ 
                     await queryRunner.query(
-                        `INSERT INTO "PackagePlatform" ("id", "packageId", "platformId", "createdDate")
-                        VALUES ($1, $2, $3, $4)`,
-                        [value.id,value.packageId,value.platformId,value.createdDate]
+                        `INSERT INTO "PackagePlatform" ("id", "packageId", "platformId","price","createdDate")
+                        VALUES ($1, $2, $3, $4, $5)`,
+                        [value.id,value.packageId,value.platformId,value.price,value.createdDate]
                     )
                 }
             )

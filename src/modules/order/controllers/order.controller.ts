@@ -1,33 +1,28 @@
 import { Request, Router,Response } from "express";
-import { UserEntity } from "../modules/auth/entities/user.entity";
-import { UserService } from "../modules/auth/services/user.service";
-import { CategoryEntity } from "../modules/category/entities/category.entity";
-import { CategoryService } from "../modules/category/services/category.service";
-import { NotificationService } from "../modules/notification/services/notification.service";
-import { OrderStage } from "../modules/order/constants/order.constant";
-import { CreateOrderRequestBody, FullfillOrderRequestBody, OrderPaymentVerificationBody } from '../modules/order/dtos/order.dto';
-import { OrderEntity } from "../modules/order/entities/order.entity";
-import { OrderService } from "../modules/order/services/order.service";
-import { PackageEntity } from "../modules/package/entities/package.entity";
-import { PackageService } from "../modules/package/services/package.service";
-import { FlutterwaveWebhookData } from "../modules/payment/flutterwave/dtos/flutterwave.dto";
-import { FlutterwaveService } from "../modules/payment/flutterwave/services/flutterwave.service";
-import { HttpError } from "../utility/error/http_error";
-import { validationMiddleware } from "../utility/middleware/validation.middleware";
-import { respond, ResponseCode} from "../utility/response/response";
+import { UserEntity } from "../../auth/entities/user.entity";
+import { UserService } from "../../auth/services/user.service";
+import { NotificationService } from "../../notification/services/notification.service";
+import { OrderEntity,
+        OrderService,
+        OrderStage,
+        CreateOrderRequestBody,
+        CreateOrderResponseBody,
+        FullfillOrderRequestBody,
+        OrderPaymentVerificationBody} from "..";
+import { FlutterwaveWebhookData } from "../../payment/flutterwave/dtos/flutterwave.dto";
+import { FlutterwaveService } from "../../payment/flutterwave/services/flutterwave.service";
+import { HttpError } from "../../../utility/error/http_error";
+import { validationMiddleware } from "../../../utility/middleware/validation.middleware";
+import { respond, ResponseCode} from "../../../utility/response/response";
 
 export class OrderController {
     public router: Router;
-    private packageService:PackageService;
-    private categoryService:CategoryService;
     private orderService:OrderService;
     private flutterwaveService:FlutterwaveService;
     private userService:UserService;
     private notificationService:NotificationService;
 
     constructor() {
-    this.packageService = new PackageService();
-    this.categoryService = new CategoryService();
     this.orderService = new OrderService();
     this.flutterwaveService = new FlutterwaveService();
     this.userService = new UserService();
@@ -70,9 +65,11 @@ export class OrderController {
         } as OrderEntity
         
         await this.orderService.saveOrderAndOneOrderDetail(order,requestBody.platformIds[0]);
+        const paymentRequest = this.flutterwaveService.initiateInlinePayment(order,requestBody.redirectUrl);
         await this.notificationService.sendOrderConfirmation(order);
-        respond(res,order);
+        respond(res,new CreateOrderResponseBody(order,paymentRequest));
     }
+    
 
     private flutterwaveWebhook = async(req:Request,res:Response)=>{
         const webHookData =  req.body.data as FlutterwaveWebhookData;

@@ -1,17 +1,20 @@
 import express from 'express';
-import { dataSource } from './utility/persistence/data-source';
-import { logError, loggerInit, logInfo } from './utility/logging/winston';
-import {errorMiddleware} from './utility/middleware/error.middleware';
 import "reflect-metadata";
 require('express-async-errors');
 import * as dotenv from "dotenv";
 import cors from "cors";
-import { CategoryController } from './controllers/category.controller';
-import { PackageController } from './controllers/package.controller';
-import { ImageController } from './controllers/image.controller';
-import { PlatformController } from './controllers/platform.controller';
-import { FrameController } from './controllers/frame.controller';
-import { OrderController } from './controllers/order.controller';
+
+import { CategoryController } from './modules/category';
+import { PackageController } from './modules/package';
+import { ImageController } from './modules/removebg';
+import { PlatformController } from './modules/platform';
+import { FrameController } from './modules/frame';
+import { OrderController } from './modules/order';
+
+import { dataSource } from './utility/persistence/data-source';
+import { logError, loggerInit, logInfo } from './utility/logging';
+import {errorMiddleware} from './utility/middleware';
+
 dotenv.config();
 class Server {
 

@@ -1,10 +1,10 @@
 import { Request, Router,Response } from "express";
-import { LoginRequestBody } from "../modules/auth/dtos/auth.dto";
-import { AuthService } from "../modules/auth/services/auth.service";
-import { UserService } from "../modules/auth/services/user.service";
-import { HttpError } from "../utility/error/http_error";
-import { validationMiddleware } from "../utility/middleware/validation.middleware";
-import { respond, ResponseCode} from "../utility/response/response";
+import { LoginRequestBody } from "../dtos/auth.dto";
+import { AuthService } from "../services/auth.service";
+import { UserService } from "../services/user.service";
+import { HttpError } from "../../../utility/error/http_error";
+import { validationMiddleware } from "../../../utility/middleware/validation.middleware";
+import { respond, ResponseCode} from "../../../utility/response/response";
 
 export class AuthController {
     public router: Router;

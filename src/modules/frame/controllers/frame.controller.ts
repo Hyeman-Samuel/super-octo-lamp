@@ -1,10 +1,10 @@
 import { Request, Router,Response } from "express";
-import { CategoryService } from "../modules/category/services/category.service";
-import { FrameRequestBody } from "../modules/frame/dtos/frame.dto";
-import { FrameEntity } from "../modules/frame/entities/frame.entity";
-import { FrameService } from "../modules/frame/services/frame.service";
-import { validationMiddleware } from "../utility/middleware/validation.middleware";
-import { respond} from "../utility/response/response";
+import { CategoryService } from "../../category/services/category.service";
+import { FrameRequestBody } from "../dtos/frame.dto";
+import { FrameEntity } from "../entities/frame.entity";
+import { FrameService } from "../services/frame.service";
+import { validationMiddleware } from "../../../utility/middleware/validation.middleware";
+import { respond} from "../../../utility/response/response";
 
 export class FrameController {
     public router: Router;

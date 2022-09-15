@@ -1,14 +1,14 @@
 import { Request, Router,Response } from "express";
-import { CategoryService } from "../modules/category/services/category.service";
-import { PackageRequestBody } from "../modules/package/dtos/package.dto";
-import { PackageEntity } from "../modules/package/entities/package.entity";
-import { PackageService } from "../modules/package/services/package.service";
-import { AddPackageToPlatformRequestBody } from "../modules/platform/dtos/platform.dto";
-import { PlatformService } from "../modules/platform/services/platform.service";
+import { CategoryService } from "../../category/services/category.service";
+import { PackageRequestBody } from "../dtos/package.dto";
+import { PackageEntity } from "../entities/package.entity";
+import { PackageService } from "../services/package.service";
+import { AddPackageToPlatformRequestBody } from "../../platform/dtos/platform.dto";
+import { PlatformService } from "../../platform/services/platform.service";
 
-import { HttpError } from "../utility/error/http_error";
-import { validationMiddleware } from "../utility/middleware/validation.middleware";
-import { respond, ResponseCode } from "../utility/response/response";
+import { HttpError } from "../../../utility/error/http_error";
+import { validationMiddleware } from "../../../utility/middleware/validation.middleware";
+import { respond, ResponseCode } from "../../../utility/response/response";
 
 export class PackageController {
     public router: Router;

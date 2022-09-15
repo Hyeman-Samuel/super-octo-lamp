@@ -2,6 +2,7 @@ import {  IsDefined,IsNotEmpty, Length,IsUrl,IsUUID, IsArray, ArrayMinSize, Matc
 import {  Expose } from "class-transformer";
 import { IsUUIDArray } from "../../common/validationConstraints";
 import { OrderDetailEntity } from "../orderdetails/entities/orderdetail.entity";
+import { OrderEntity } from '../entities/order.entity';
 
 
 export class CreateOrderRequestBody{
@@ -35,6 +36,12 @@ export class CreateOrderRequestBody{
     @Length(0,20)
     @Matches("#[\w$@\-]*","",{message:"Invalid Hashtag"})
     hashtag!:string
+
+    @IsDefined()
+    @Expose()
+    @IsNotEmpty()
+    //@IsUrl()
+    redirectUrl!: string
 
 
     @IsOptional()
@@ -77,4 +84,16 @@ export class OrderPaymentVerificationBody{
     @Expose()
     @IsNotEmpty()
     orderReference!:string
+}
+
+export class CreateOrderResponseBody{
+    /**
+     *
+     */
+    constructor(order:OrderEntity,paymentRequest:object) {
+        this.order=order;
+        this.paymentRequest=paymentRequest;
+    }
+    order!:OrderEntity
+    paymentRequest!:object
 }

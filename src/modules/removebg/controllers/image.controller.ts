@@ -1,10 +1,10 @@
 import { Request, Router,Response } from "express";
-import { RemoveBgService } from "../modules/removebg/services/removebg.service";
-import { HttpError } from "../utility/error/http_error";
+import { RemoveBgService } from "../services/removebg.service";
+import { HttpError } from "../../../utility/error/http_error";
 import {tmpdir} from "os";
 import multer from "multer"
 const upload = multer({ dest: tmpdir() });
-import { respond, ResponseCode } from "../utility/response/response";
+import { respond, ResponseCode } from "../../../utility/response/response";
 export class ImageController {
     public router: Router;
     private removebgService:RemoveBgService
@@ -16,7 +16,6 @@ export class ImageController {
     }
 
     
-
 
     private convertImageToPng = async (req:Request,res:Response)=>{
         const image = req.file;

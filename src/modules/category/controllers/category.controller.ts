@@ -1,11 +1,9 @@
 import { Request, Router,Response } from "express";
-import { CategoryRequestBody } from "../modules/category/dtos/category.dto";
-import { CategoryEntity } from "../modules/category/entities/category.entity";
-import { CategoryService } from "../modules/category/services/category.service";
-import { PackageService } from "../modules/package/services/package.service";
-import { HttpError } from "../utility/error/http_error";
-import { validationMiddleware } from "../utility/middleware/validation.middleware";
-import { respond, ResponseCode } from "../utility/response/response";
+import { CategoryEntity,CategoryRequestBody,CategoryService } from "..";
+import { PackageService } from "../../package";
+import { HttpError } from "../../../utility/error";
+import { validationMiddleware } from "../../../utility/middleware";
+import { respond, ResponseCode } from "../../../utility/response";
 
 export class CategoryController {
     public router: Router;
