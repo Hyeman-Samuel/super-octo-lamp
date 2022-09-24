@@ -1,0 +1,19 @@
+version: 1.0
+os: linux
+files:
+  - source: /
+    destination: /home/ec2-user/filtar
+    overwrite: true
+hooks:
+  ApplicationStop:
+    - location: aws-scripts/application-stop.sh
+      timeout: 300
+      runas: ec2-user
+  BeforeInstall:
+    - location: aws-scripts/before-install.sh
+      timeout: 300
+      runas: ec2-user
+  ApplicationStart:
+    - location: aws-scripts/application-start.sh
+      timeout: 300
+      runas: ec2-user
