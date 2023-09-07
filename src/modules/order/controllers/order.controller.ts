@@ -48,7 +48,7 @@ export class OrderController {
             throw new HttpError("phone number is required or login before using",ResponseCode.BAD_REQUEST)
         }
         if((!email) && !user ){
-            throw new HttpError("email is required or login before using",ResponseCode.BAD_REQUEST)
+            throw new HttpError("email is required or login before using", ResponseCode.BAD_REQUEST)
         }
         const designs:string[] = [requestBody.designImage]
         const hashtags:string[] = [requestBody.hashtag]
@@ -158,7 +158,9 @@ export class OrderController {
         this.router.get("/:orderReference",)
         this.router.post("/",validationMiddleware(CreateOrderRequestBody),this.createOrder)
         this.router.post("/payment/flutterwave",validationMiddleware(FullfillOrderRequestBody),this.fuilfillOrder)
+        
         this.router.post("/flutterwave/redirect",this.flutterwaveWebhook)
+
         this.router.put("/:orderId/upload/platform/:platformId")
         this.router.put("/:orderId/submit")
         this.router.put("/:orderId/sendback")

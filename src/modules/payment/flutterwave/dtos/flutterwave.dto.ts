@@ -6,6 +6,7 @@ export class FlutterwaveTransferResponseBody{
     checkoutLink!:string
 }
 
+
 export class FlutterwaveWebhookData{
     status!: string
     tx_ref!:string
@@ -23,6 +24,7 @@ export class FlutterwaveWebhookData{
     payment_type!: string
     created_at!: string
 }
+
 
 export class FlutterwaveVerificationResponseData{
     flw_ref!:string
